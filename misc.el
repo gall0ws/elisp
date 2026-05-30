@@ -68,3 +68,22 @@ If there is no region active, display the point."
     (if (use-region-p)
        (format "(%d %d)" (region-beginning) (region-end))
      (format "%d" (point)))))
+
+(defun move-to-char (char)
+  "Move point forward to CHAR.
+
+It is meant to be used interactively with a key for super fast
+navigation. For example, if you set something like:
+
+	(global-set-key (kbd \"C-c m\") 'move-to-char)
+
+Then you can type:
+
+	\\`C-c m s'	move point to the next `s'
+	\\`C-c m o'	move point to the next `o'
+	\\`C-c m S'	move point to the next `S'
+
+Note: `move-to-char' is case sensitive and no RET press is ever needed."
+  (interactive "c")
+  (let ((case-fold-search nil))
+    (search-forward (string char) nil t)))
