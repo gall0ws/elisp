@@ -43,7 +43,7 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
        (when (use-region-p) (region-end))
        current-prefix-arg))
   (unless (numberp start) (setq start (point-min)))
-  (unless (numberp end) (setq start (point-max)))
+  (unless (numberp end) (setq end (point-max)))
   (let ((bufname (format "*%s-OUTPUT*" (car (string-split command))))
 	(temp-buffer-show-hook (lambda ()
 				 (read-only-mode)
@@ -81,3 +81,26 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
      start end
      (getenv "SHELL") t `(t ,(not discard-stderr)) t
      "-c" command)))
+
+(defun exec! (command &optional discard-stderr)
+  "Execute COMMAND and print its output in a separate buffer.
+
+The command COMMAND is executed using the shell set in the environment
+variable `SHELL'.
+
+COMMAND output (both stdout and stderr) is redirected in a separate
+buffer, unless DISCARD-STDERR is non-nil: in such case standard error
+is simply discarded.
+
+DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
+  (interactive
+      (list
+       (read-shell-command "Command: ")
+       current-prefix-arg))
+  (let ((bufname (format "*%s-OUTPUT*" (car (string-split command))))
+	(temp-buffer-show-hook (lambda ()
+				 (read-only-mode)
+				 (text-mode))))
+    (with-output-to-temp-buffer bufname
+      (call-process (getenv "SHELL") nil (list bufname (not discard-stderr)) t
+		    "-c" command))))
