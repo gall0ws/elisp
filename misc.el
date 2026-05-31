@@ -53,15 +53,6 @@
   (interactive "MMachine: \nFFile: ")
   (find-file (concat "/ssh:" machine ":" filename)))
 
-(declare-function eshell-send-input "esh-mode.el")
-
-(defun eshell-clear-buffer ()
-  "Clear eshell buffer."
-  (interactive)
-  (let ((inhibit-read-only t))
-    (erase-buffer)
-    (eshell-send-input)))
-
 (defun show-region-or-point ()
   "Display current active region in the echo area.
 If there is no region active, display the point."
