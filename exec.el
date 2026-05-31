@@ -45,7 +45,7 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
   (unless (numberp start) (setq start (point-min)))
   (unless (numberp end) (setq end (point-max)))
   (let ((bufname (format "*%s-OUTPUT*" (car (string-split command))))
-	(temp-buffer-show-hook (lambda ()
+	(temp-buffer-show-hook (λ ()
 				 (read-only-mode)
 				 (text-mode))))
     (with-output-to-temp-buffer bufname
@@ -55,7 +55,7 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
        "-c" command))))
 
 (defun exec| (command &optional start end discard-stderr)
-  "Execute COMMAND providing its stdin and replacing the area selected with its output.
+  "Execute COMMAND providing stdin and replacing the area selected with its output.
 
 The command COMMAND is executed using the shell set in the environment
 variable `SHELL', its input is provided from the area in the current
@@ -98,7 +98,7 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
        (read-shell-command "Command: ")
        current-prefix-arg))
   (let ((bufname (format "*%s-OUTPUT*" (car (string-split command))))
-	(temp-buffer-show-hook (lambda ()
+	(temp-buffer-show-hook (λ ()
 				 (read-only-mode)
 				 (text-mode))))
     (with-output-to-temp-buffer bufname

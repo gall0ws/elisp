@@ -53,6 +53,8 @@
   (interactive "MMachine: \nFFile: ")
   (find-file (concat "/ssh:" machine ":" filename)))
 
+(declare-function eshell-send-input "esh-mode.el")
+
 (defun eshell-clear-buffer ()
   "Clear eshell buffer."
   (interactive)
@@ -75,7 +77,7 @@ If there is no region active, display the point."
 It is meant to be used interactively with a key for super fast
 navigation. For example, if you set something like:
 
-	(global-set-key (kbd \"C-c m\") 'move-to-char)
+	(global-set-key (kbd \"C-c m\") \='move-to-char)
 
 Then you can type:
 
