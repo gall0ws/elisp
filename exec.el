@@ -104,3 +104,5 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
     (with-output-to-temp-buffer bufname
       (call-process (getenv "SHELL") nil (list bufname (not discard-stderr)) t
 		    "-c" command))))
+
+(provide 'exec)
