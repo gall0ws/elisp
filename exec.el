@@ -45,7 +45,7 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
   (unless (numberp start) (setq start (point-min)))
   (unless (numberp end) (setq end (point-max)))
   (let ((bufname (generate-new-buffer-name (format "*%s-OUTPUT*" (car (string-split command)))))
-	(temp-buffer-show-hook (λ ()
+	(temp-buffer-show-hook (lambda ()
 				 (read-only-mode)
 				 (text-mode))))
     (with-output-to-temp-buffer bufname
@@ -98,7 +98,7 @@ DISCARD-STDERR can be set using `universal-argument' \\[universal-argument]."
        (read-shell-command "Command: ")
        current-prefix-arg))
   (let ((bufname (generate-new-buffer-name (format "*%s-OUTPUT*" (car (string-split command)))))
-        (temp-buffer-show-hook (λ ()
+        (temp-buffer-show-hook (lambda ()
 				 (read-only-mode)
 				 (text-mode))))
     (with-output-to-temp-buffer bufname

@@ -31,7 +31,7 @@
   (unless (numberp start) (setq start (point-min)))
   (unless (numberp end) (setq end (point-max)))
   (save-excursion
-    (mapc (λ (cons)
+    (mapc (lambda (cons)
 	    (goto-char start)
 	    (while (re-search-forward (car cons) end t)
 	      (replace-match (cdr cons))))
@@ -41,7 +41,7 @@
 (defun reread-buffer ()
   "Reload the current buffer."
   (interactive)
-  (find-file buffer-file-name))
+  (message "Reloaded %s" (find-file buffer-file-name)))
 
 (defun find-file-sudo (filename)
   "Edit file FILENAME using sudo(1)."
@@ -80,3 +80,5 @@ Note: `move-to-char' is case sensitive and no RET press is ever needed."
   (interactive "c")
   (let ((case-fold-search nil))
     (search-forward (string char) nil t)))
+
+(provide 'xtra)
