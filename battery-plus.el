@@ -1,5 +1,5 @@
 ;; -*- lexical-binding: t -*-
-(define-inline battery/status-information (code)
+(define-inline battery-plus--info (code)
   "Parse `battery-pmset' for battery information.
 
 CODE can assume one of following values:
@@ -12,24 +12,24 @@ CODE can assume one of following values:
 \"m\": Remaining time (to charge or discharge) in minutes
 \"h\": Remaining time (to charge or discharge) in hours
 \"t\": Remaining time (to charge or discharge) in the form ‘h:min’"
-  (cdr (assq (string-to-char code)
-	     (battery-pmset))))
+  (assoc-default (string-to-char code)
+                 (battery-pmset)))
 
-(define-inline battery/lowp ()
+(define-inline battery-plus-low-p ()
   "Return t if the battery is low on power.
 
 The concept of `low' is governed by the variable `battery-load-low'."
-  (string-match-p "-" (battery/status-information "b")))
+  (string-match-p "-" (battery-plus--info "b")))
 
-(define-inline battery/chargingp ()
+(define-inline battery-plus-charging-p ()
 "Return t if the battery is charging."
-  (string-match-p "+" (battery/status-information "b")))
+  (string-match-p "+" (battery-plus--info "b")))
 
-(define-inline battery/ac-plugged-p ()
+(define-inline battery-plus-ac-plugged-p ()
 "Return t if the AC is plugged in."
-  (string-match-p "AC" (battery/status-information "L")))
+  (string-match-p "AC" (battery-plus--info "L")))
 
-(defun battery/emoji-string ()
+(defun battery-plus-emoji-string ()
   "Return an emoji string appropriate to the current status of the battery.
 
 The prefix will be one amongst `HIGH VOLTAGE SIGN' or `ELECTRIC PLUG'
@@ -38,14 +38,14 @@ plugged in. If neither of those cases are true, a SPC is printed instead.
 
 Then the `BATTERY' emoji is added, unless the current voltage status
 is deemed `low', in such case the `LOW BATTERY' emoji is chosen."
-  (format "%s%s"
-	  (string
-	   (if (battery/chargingp)
-	       (char-from-name "HIGH VOLTAGE SIGN")
-	     (if (battery/ac-plugged-p)
-		 (char-from-name "ELECTRIC PLUG")
-	       32)))
-	  (string
-	   (if (battery/lowp)
-	       (char-from-name "LOW BATTERY")
-	     (char-from-name "BATTERY")))))
+  (concat
+   (when (battery-plus-charging-p)
+     (string (char-from-name "HIGH VOLTAGE SIGN")))
+   (when (battery-plus-ac-plugged-p)
+     (string (char-from-name "ELECTRIC PLUG")))
+   (string
+    (if (battery-plus-low-p)
+	(char-from-name "LOW BATTERY")
+      (char-from-name "BATTERY")))))
+
+(provide 'battery-plus)
